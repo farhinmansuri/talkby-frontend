@@ -1,0 +1,30 @@
+@import "tailwindcss";
+
+:root {
+    --brand: #9FA96C;
+    --app-bg: #182439;
+    --gen-text: #ffffff;
+    --app-trans-bg: #2C3A52;
+    --box-border:#cfcfcf;
+    --light-brand: #e8f0c278;
+
+}
+
+.dark {
+    --brand: #4c5135;
+    --app-bg: #e2f0fb;
+    --gen-text: #000000;
+    --app-trans-bg: #FEFEFE;
+    --box-border:#FEFEFE;
+    --light-brand: #e8f0c278;
+
+}
+
+@theme inline {
+    --color-brand: var(--brand);
+    --color-app-bg: var(--app-bg);
+    --color-gen-text: var(--gen-text);
+    --color-app-trans-bg: var(--app-trans-bg);
+    --color-box-border: var(--box-border);
+    --color-light-brand: var(--light-brand);
+}
