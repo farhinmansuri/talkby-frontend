@@ -1,7 +1,7 @@
 import axios from "axios";
 
 //export const BACKEND_BASE_URL="http://localhost:5000"
-export const BACKEND_BASE_URL="https://talkby-backend.onrender.com"
+export const BACKEND_BASE_URL=import.meta.env.VITE_API_URL
 
 const api = axios.create({
     baseURL: BACKEND_BASE_URL+"/api",
