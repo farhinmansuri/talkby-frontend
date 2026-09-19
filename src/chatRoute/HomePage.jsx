@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import IconBox from '../component/IconBox'
 import ThemeChanger from '../component/ThemeChanger'
 import ChatUserBox from '../component/ChatUserBox'
@@ -30,7 +30,7 @@ const HomePage = () => {
         //join to Personal room
         socket.emit("join_conversation", authUser._id)
     }, [])
-   
+
     const [recievedMessage, setRecievedMessage] = useState(null);
 
 
@@ -41,14 +41,14 @@ const HomePage = () => {
             //check conversationId
             try {
                 if (message.conversationId && message.conversationId === currentConversation._id) {
-                
+
                     setRecievedMessage(message)
                 } else {
                     console.log("New message:", " for another conversation")
-                    
+
                 }
-              // referesh Conversation pannel
-              refetch()
+                // referesh Conversation pannel
+                refetch()
 
             } catch (error) {
 
@@ -111,6 +111,22 @@ const HomePage = () => {
     } = useGetMyConversation({ userId: authUser._id });
     const myConversation = data?.data || [];
 
+    const filteredConversation = useMemo(() => {
+
+        if (!searchText.trim()) return myConversation;
+        const query = searchText.toLowerCase()
+        return myConversation.filter((conv) => {
+            const opositeUser = conv.opositeUser
+            const firstName = opositeUser.firstName?.toLowerCase() || ''
+            const lastName = opositeUser.lastName?.toLowerCase() || ''
+            return (firstName.includes(query) ||
+                lastName.includes(query))
+        });
+
+
+    }, [myConversation, searchText])
+
+
 
 
     return (
@@ -122,7 +138,7 @@ const HomePage = () => {
                         <h1 className='text-gen-text text-xl ml-3'>Chat</h1>
                         <div className='border-2 border-box-border rounded-2xl p-2 bg-app-trans-bg mt-2'>
                             <input type='text' placeholder='Search Chat or People'
-                                className='outline-none text-gen-text text-xs w-full'
+                                className='outline-none text-gen-text text-xs w-full px-2'
                                 value={searchText} onChange={(e) => setSearchText(e.target.value)}
                             />
                         </div>
@@ -132,7 +148,7 @@ const HomePage = () => {
 
 
                             {
-                                myConversation.map((conver) => (
+                                filteredConversation.map((conver) => (
                                     <ChatUserBox conversation={conver} />
                                 ))
                             }

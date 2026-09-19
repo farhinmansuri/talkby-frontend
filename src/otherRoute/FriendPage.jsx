@@ -9,7 +9,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import { ConversationType } from '../CommanUtils'
 import { setCurrentConversation } from '../redux/currentConversation'
 import { useNavigate } from 'react-router-dom'
-import { removeAllMessages } from '../redux/MessagesSlice'
 
 const FriendPage = () => {
     const dispatch = useDispatch()
@@ -23,11 +22,8 @@ const FriendPage = () => {
         isFetching,
         isError,
     } = useSearchUsers({ searchText: debouncedSearch, self_id: authUser._id })
-    const Searchedusers = data?.data || [];
-    const textUser = {
-        firstName: "abc",
-        lastName: "qwert"
-    }
+    const Searchedusers = debouncedSearch?(data?.data || []):[];
+    
 
     const onClickChat = ({ user }) => {
         const tempConversation = {
@@ -40,16 +36,20 @@ const FriendPage = () => {
             _id: user.conversation_id || null
 
         }
-        console.log(tempConversation)
+      //  console.log(tempConversation)
         dispatch(setCurrentConversation({ conversation: tempConversation }))
-        
+
 
         navigate(-1)
 
     }
+    const clearSearcbar = () => {
+        setSearchText("")
+        
+    }
     return (
         <div className='min-h-screen h-screen bg-app-bg flex'>
-            <div className='flex-1 px-4'>
+            <div className='flex-1 px-6'>
                 <h1 className='text-gen-text mt-5 text-2xl'>Discover Pepple</h1>
                 <p className='text-gen-text text-xs'>Find new friends and grow your network</p>
                 <div className='border-2 border-box-border rounded-2xl 
@@ -60,7 +60,7 @@ const FriendPage = () => {
                             className='outline-none text-gen-text text-xs grow mx-2'
                             value={searchText} onChange={(e) => setSearchText(e.target.value)}
                         />
-                        <MdClose size={14} className='text-gen-text cursor-pointer' />
+                        <MdClose size={14} className='text-gen-text cursor-pointer' onClick={clearSearcbar} />
                     </div>
 
                 </div>

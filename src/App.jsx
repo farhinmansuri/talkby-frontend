@@ -20,6 +20,8 @@ import ProfilePage from './routes/ProfilePage'
 import { useSelector } from 'react-redux'
 import SearchPage from './otherRoute/SearchPage'
 import FriendPage from './otherRoute/FriendPage'
+import OTP_Page from './routes/OTP_Page'
+import ChangePassword from './routes/ChangePassword'
 
 
 
@@ -45,6 +47,10 @@ function App() {
                   path={RoutPath.LOGIN} />
                 <Route element={<RegisterPage />}
                   path={RoutPath.SINGUP} />
+                <Route element={<OTP_Page />}
+                  path={RoutPath.OTPPAGE} />
+                <Route element={<ChangePassword />}
+                  path={RoutPath.CHANGE_PASSWOR} />
               </Route>
               <Route element={<ProtectedRoute />}>
                 <Route element={<HomePage />} path={RoutPath.HOME} />

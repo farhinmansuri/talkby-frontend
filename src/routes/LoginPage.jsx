@@ -13,17 +13,23 @@ import { useLoginHook } from '../hook/authHook'
 import { useDispatch } from 'react-redux'
 import { setCredentials } from '../redux/authSlice'
 import toast from 'react-hot-toast'
+import LoaderOval from '../component/LoaderOval'
+import { usePasswordSendOTP } from '../hook/passwordHook'
 const LoginPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch()
+
+
 
   const [showPassword, setShowPassword] = useState(false);
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors }
   } = useForm()
-
+  const emailText = watch('email')
+  const isEmailComplete = EMAIL_PATTERN.test(emailText || "")
   const {
     mutate
   } = useLoginHook()
@@ -52,6 +58,19 @@ const LoginPage = () => {
     //
 
   }
+  const { mutate: sendOtpMutate, isPending } = usePasswordSendOTP()
+  const gotoOTP_page = () => {
+    sendOtpMutate({ email: emailText }, {
+      onSuccess: (data) => {
+        navigate(RoutPath.OTPPAGE, { state: { 'email': emailText } })
+      },
+      onError: (err) => {
+        toast(err.response?.data?.message)
+      }
+    })
+
+  }
+
   const divBoxCSS = 'border-2 border-gray-700 rounded-2xl py-2 px-1 flex items-center mt-2';
   const iconCss = 'text-gray-500 text-xs ml-3';
   const eyeCss = 'text-gray-500 text-xl me-3 cursor-pointer';
@@ -155,13 +174,12 @@ const LoginPage = () => {
                 </div>
                 {errors.password && <span className={` ${errorClass}`}>{errors.password.message}</span>}
               </div>
-              <div className='flex  justify-between items-center mt-3'>
-                <div className='flex w-fit'>
-                  <input type='checkbox' />
-                  <span className='text-gen-text text-xs ml-0.5'>Remenber me</span>
-                </div>
+              <div className='flex  justify-end items-center mt-3'>
+
                 <div>
-                  <span className=' text-xs text-brand cursor-pointer hover:underline'>Forgot password?</span>
+                  <span className={` text-xs text-brand cursor-pointer hover:underline 
+                    ${isEmailComplete ? 'opacity-100 visible' : 'opacity-0 invisible'}`}
+                    onClick={gotoOTP_page}>Forgot password?</span>
                 </div>
 
               </div>
@@ -198,7 +216,7 @@ const LoginPage = () => {
 
       </div>
 
-
+      <LoaderOval showLoader={isPending} />
     </div>
   )
 }

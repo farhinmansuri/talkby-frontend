@@ -26,3 +26,15 @@ export const getConversationMessages = async ({ conversationId, page, limit, }) 
     const response = await api.get("/chat/getConversationMessage", { params: { conversationId, page, limit } })
     return response.data
 }
+export const sendOptToEmail = async (email) => {
+    const response = await api.post("/password/otpSend", email)
+    return response.data
+}
+export const verifyOtp = async (payload) => {
+    const response = await api.post("/password/verifyOtp", payload)
+    return response.data
+}
+export const changePasswodAfterOtpVerified = async (payload) => {
+    const response = await api.post("/password/changePasswordByVerifiedUser", payload)
+    return response.data
+}

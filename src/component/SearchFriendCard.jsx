@@ -22,7 +22,7 @@ const SearchFriendCard = ({ user, onClickChat }) => {
             </div>
             <div className='flex-row  justify-start mx-2 grow' >
                 <p className='text-gen-text'>{user.firstName} {user.lastName}</p>
-                <p className='text-gen-text text-xs'>email is here</p>
+                <p className='text-gen-text text-xs'>{user.email}</p>
             </div>
             <div className='flex'>
                 <div className='flex-row items-end justify-end'>
