@@ -1,7 +1,9 @@
 import axios from "axios";
+import {store} from '../redux/store'
 
 //export const BACKEND_BASE_URL="http://localhost:5000"
 export const BACKEND_BASE_URL=import.meta.env.VITE_API_URL
+
 
 const api = axios.create({
     baseURL: BACKEND_BASE_URL+"/api",
@@ -11,21 +13,21 @@ const api = axios.create({
 })
 
 
-// api.interceptors.request.use(
-//     (config) => {
-//         const user = store.getState().auth.user;
-//         if (user) {
-//             const token = user.token;
-//             if (token) {
-//                 config.headers.Authorization = `Bearer ${token}`
-//             }
-//         }
+api.interceptors.request.use(
+    (config) => {
+        const user = store.getState().auth.user;
+        if (user) {
+            const token = user.token;
+            if (token) {
+                config.headers.Authorization = `Bearer ${token}`
+            }
+        }
 
-//         return config;
+        return config;
 
-//     },
-//     (error) => Promise.reject(error)
-// )
+    },
+    (error) => Promise.reject(error)
+)
 
 
 export default api;
